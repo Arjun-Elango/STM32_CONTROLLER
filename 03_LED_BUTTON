@@ -1,0 +1,41 @@
+/*CONTROL LED WITH USER BUTTONS
+ * LED CONNECTED TO PA5 , BUTTON CONNECT TO PC13
+ * WHEN PC13 IS HIGH IT SHOW THE OPEN SWITCH
+ * WHEN PC13 IS LOW IT SHOW THE CLOSED SWITCH
+ * BASED ON THE BUTTON HIGH ->OFF THE LED
+ * BUTTON  LOW --> ON THE LED
+ * BOTH PORTS ARE CONNECTED TO AHB1
+ * TO ENABLE CLOCK PLUSE BIT0 -> PORTA,BIT2 -> PORTC
+ * MODER5 FOR PA5 AS OUTPUT BIT 10 ->1 , BIT11->0
+ * MODER13 FOR PC13 AS INPUT BIT 26->0, BIT27->0
+ * IDR13 -> 1 THEN ODR5 ->0
+ * IDR13 -> 0 THEN ODR5 ->1
+ */
+#include "stm32f4xx.h"
+
+#define GPIOAEN (1U<<0)
+#define GPIOCEN (1U<<2)
+#define LED     (1U<<5)
+#define BUTTON  (1U<<13)
+
+int main(void){
+	/* Enable clock for GPIOA*/
+	/*RCC-> AHB1ENR it is 32 bit register we need set Bit 0 should be high
+	 * to enable clock for port A */
+	RCC-> AHB1ENR |= GPIOAEN;
+	/*RCC-> AHB1ENR it is 32 bit register we need set Bit 2 should be high
+		 * to enable clock for port C*/
+		RCC-> AHB1ENR |= GPIOCEN;
+	/*set the Direction of PA5(LED) AS OUTPUT*/
+	GPIOA->MODER |= (1U<<10); //1
+	GPIOA->MODER &=~(1U<<11); //0 ->O/P
+	/*set the Direction of P13(BUTTON) AS INPUT*/
+    GPIOC->MODER &=~(1U<<26);
+    GPIOC->MODER &=~(1U<<27);
+	while(1){
+		while((GPIOC->IDR& BUTTON)==0){
+			GPIOA-> ODR |= LED;
+		}
+		GPIOA-> ODR &=~LED;
+}
+}
