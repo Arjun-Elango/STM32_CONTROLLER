@@ -1,0 +1,29 @@
+/* STEPS TO CONTROL LED(PA5)
+ * Identify the bus to which GPIOA is connected
+ * Enable clock for GPIOA using RCC-> AHB1ENR register
+ * set direction of PA5 using GPIOA->MODER register
+ * set PA5 using GPIOA->ODR register
+ * From the block diagram we can find all the GPIO PORTS A-H CONNECTED TO AHB-1 84MHz
+ */
+#include "stm32f4xx.h"
+
+#define GPIOAEN (1U<<0)
+#define LED     (1U<<5)
+int main(void){
+	/* Enable clock for GPIOA*/
+	/*RCC-> AHB1ENR it is 32 bit register we need set Bit 0 should be high to enable clock for port A */
+	RCC-> AHB1ENR |= GPIOAEN;
+	/*set the Direction of PA5(LED)*/
+	GPIOA->MODER |= (1U<<10); //1
+	GPIOA->MODER &=~(1U<<11); //0 ->O/P
+	while(1){
+		/*turn on LED*/
+		GPIOA->ODR |=LED; // led=1
+		/*insert a delay , we using for loop */
+		for(int i=0;i<1000000;i++);
+		/*turn off led*/
+		GPIOA->ODR &=~LED;
+		/*insert a delay , we using for loop */
+	    for(int i=0;i<1000000;i++);
+	}
+}
