@@ -1,0 +1,4 @@
+../Src/usart.c:24:6:usart_init	1
+../Src/usart.c:63:6:usart_write	2
+../Src/usart.c:71:5:usart_read	2
+../Src/usart.c:78:5:__io_putchar	1
