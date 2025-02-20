@@ -9,12 +9,15 @@ int main(void)
 
 	while(1)
 	{
-		systickMs(1000);
-        printf("1 second is over");
+		printf("Start\n\r");
+		systickMs(1000);  // Should delay exactly 1 second
+		printf("End\n\r");
+        systickMs(1000);
+        printf("2 second is over!..\n\r");
+
 	}
 
 }
-
 
 
 
